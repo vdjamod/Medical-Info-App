@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 //models
 import Admin from "./models/admin.js";
-import Medicine from "./models/Medicine";
+import Medicine from "./models/medicine.js"
 
 const app = express();
 
@@ -19,30 +19,44 @@ async function main() {
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
-const createMedicine = async () => {
-    
-}
 
-// Create a new admin
-const createAdmin = async () => {
-    try {
-        const admin = new Admin({
-            email: 'xyz@gmail.com',
-            password: 'xyz@1090',  // Make sure to hash the password in real apps
-        });
+
+// // Create a new admin
+// const createAdmin = async () => {
+//     try {
+//         const admin = new Admin({
+//             email: 'xyz@gmail.com',
+//             password: 'xyz@1090',  // Make sure to hash the password in real apps
+//         });
         
-        const savedAdmin = await admin.save();
-        console.log('Admin saved:', savedAdmin);
-    } catch (error) {
-        console.error('Error saving admin:', error);
-    }
-};
+//         const savedAdmin = await admin.save();
+//         console.log('Admin saved:', savedAdmin);
+//     } catch (error) {
+//         console.error('Error saving admin:', error);
+//     }
+// };
 
 
 // Call the function
 // createAdmin();
 
 let port = 2020;
+
+
+app.post('/API/admin', async(req, res) => {
+  let { id } = req.params;
+  let newMedicine = new Medicine(req.body);
+  const response = await newMedicine.save();
+  console.log("New Medicine save into db" + response);
+  res.redirect(`/admin`);
+});
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log("Server is running at port " + port);

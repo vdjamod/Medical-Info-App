@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import Login from "./components/admin/Login";
+import AdminHome from "./components/admin/AdminHome";
+import CreateMedicine from "./components/admin/CreateMedicine";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminHome />}/>
+          <Route path="/admin/create" element={<CreateMedicine />} />
         </Routes>
       </Router>
     </>

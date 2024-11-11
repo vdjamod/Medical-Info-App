@@ -14,6 +14,6 @@ const adminSchema = new Schema({
 });
 
 //collection name,it's Schema
-const Admin = mongoose.model('Medicine', adminSchema);
+const Admin = mongoose.model('Admin', adminSchema);
 
 export default Admin;
