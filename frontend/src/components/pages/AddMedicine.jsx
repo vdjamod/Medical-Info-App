@@ -1,8 +1,30 @@
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
-export default function CreateMedicine() {
+export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
   let { id } = useParams();
+  const [name, setName] = useState("");
+  const [uses, setUses] = useState("");
+  const [sideEffects, setSideEffect] = useState("");
+  const [ingredients, setIngredient] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("/API/admin", {
+        name,
+        uses,
+        side_effects: sideEffects,
+        ingredients,
+      });
+    } catch (err) {
+      console.log("Unable to add Medicine" + err);
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -13,17 +35,13 @@ export default function CreateMedicine() {
                 alt="Your Company"
               /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Create Medicine
+            Add Medicine
           </h2>
         </div>
 
         {/* Name */}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            className="space-y-6"
-            action={`/API/admin`}
-            method="POST"
-          >
+          <form className="space-y-6" onClick={handleSubmit}>
             <div>
               <label
                 htmlFor="name"
@@ -36,6 +54,7 @@ export default function CreateMedicine() {
                   id="name"
                   name="name"
                   type="text"
+                  onChange={(e) => setName(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -57,12 +76,12 @@ export default function CreateMedicine() {
                   id="uses"
                   name="uses"
                   type="text"
+                  onChange={(e) => setUses(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
-
 
             {/* Side Effects  */}
             <div>
@@ -79,6 +98,7 @@ export default function CreateMedicine() {
                   id="side_effect"
                   name="side_effect"
                   type="text"
+                  onChange={(e) => setSideEffect(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -99,6 +119,7 @@ export default function CreateMedicine() {
                 <input
                   id="ingredient"
                   name="ingredient"
+                  onChange={(e) => setIngredient(e.target.value)}
                   type="text"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
