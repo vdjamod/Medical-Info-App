@@ -1,28 +1,49 @@
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
-  let { id } = useParams();
   const [name, setName] = useState("");
-  const [uses, setUses] = useState("");
-  const [sideEffects, setSideEffect] = useState("");
-  const [ingredients, setIngredient] = useState("");
+  const [uses, setUses] = useState([]);
+  const [newUse, setNewUse] = useState("");
+  const [sideEffect, setSideEffect] = useState([]);
+  const [newSideEffect, setNewSideEffect] = useState("");
+  const [ingredients, setIngredient] = useState([]);
+
+  const addNewSideEffect = () => {
+    if (newSideEffect.trim()) {
+      // Prevents empty entries
+      setSideEffect((prevSideEffects) => [
+        ...prevSideEffects,
+        newSideEffect.trim(),
+      ]);
+      setNewSideEffect("");
+    }
+
+    console.log(sideEffect);
+  };
+
+  const addNewUse = () => {
+    if (newUse.trim()) {
+      setUses((prevUses) => [...prevUses, newUse.trim()]);
+      setNewUse("");
+    }
+
+    console.log(uses);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await axios.post("/API/admin", {
-        name,
-        uses,
-        side_effects: sideEffects,
-        ingredients,
-      });
-    } catch (err) {
-      console.log("Unable to add Medicine" + err);
-    }
+    // e.preventDefault();
+    // try {
+    //   const res = await axios.post("/API/admin", {
+    //     name,
+    //     uses,
+    //     side_effects: sideEffects,
+    //     ingredients,
+    //   });
+    // } catch (err) {
+    //   console.log("Unable to add Medicine" + err);
+    // }
   };
 
   return (
@@ -71,15 +92,32 @@ export default function AddMedicine() {
                   Uses
                 </label>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 flex space-x-4">
                 <input
                   id="uses"
                   name="uses"
                   type="text"
-                  onChange={(e) => setUses(e.target.value)}
+                  value={newUse}
+                  onChange={(e) => setNewUse(e.target.value)}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                <div className="flex-1">
+                  <button
+                    type="button"
+                    onClick={addNewUse}
+                    className="text-indigo-600 hover:text-indigo-800"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              <div>
+                <ul>
+                  {uses.map((use, idx) => (
+                    <li key={idx}>{use}</li>
+                  ))}
+                </ul>
               </div>
             </div>
 
@@ -88,20 +126,37 @@ export default function AddMedicine() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="side_effect"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="text-sm font-medium leading-6 text-gray-900"
                 >
                   Side Effects
                 </label>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 flex space-x-4">
                 <input
                   id="side_effect"
                   name="side_effect"
                   type="text"
-                  onChange={(e) => setSideEffect(e.target.value)}
+                  value={newSideEffect}
+                  onChange={(e) => setNewSideEffect(e.target.value)}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                <div className="flex-1">
+                  <button
+                    type="button"
+                    onClick={addNewSideEffect}
+                    className="text-indigo-600 hover:text-indigo-800"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              <div>
+                <ul>
+                  {sideEffect.map((sideEffect, idx) => (
+                    <li key={idx}>{sideEffect}</li>
+                  ))}
+                </ul>
               </div>
             </div>
 
@@ -115,15 +170,66 @@ export default function AddMedicine() {
                   Ingredients
                 </label>
               </div>
-              <div className="mt-2">
-                <input
-                  id="ingredient"
-                  name="ingredient"
-                  onChange={(e) => setIngredient(e.target.value)}
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
+              <div className="mt-2 flex space-x-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="ingredient-name"
+                    className="text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Name
+                  </label>
+                  <input
+                    id="ingredient-name"
+                    name="ingredient-name"
+                    onChange={(e) => setIngredientName(e.target.value)}
+                    type="text"
+                    required
+                    className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <label
+                    htmlFor="ingredient-description"
+                    className="text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Description
+                  </label>
+                  <input
+                    id="ingredient-description"
+                    name="ingredient-description"
+                    onChange={(e) => setIngredientDescription(e.target.value)}
+                    type="text"
+                    required
+                    className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <label
+                    htmlFor="ingredient-quantity"
+                    className="text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Quantity
+                  </label>
+                  <input
+                    id="ingredient-quantity"
+                    name="ingredient-quantity"
+                    onChange={(e) => setIngredientQuantity(e.target.value)}
+                    type="text"
+                    required
+                    className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+
+                <div className="mt-5 flex-1">
+                  <button
+                    type="button"
+                    className="text-indigo-600 hover:text-indigo-800"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
             </div>
 
