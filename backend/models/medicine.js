@@ -18,11 +18,31 @@ const medicineSchema = new Schema({
     type: String,
     require: true,
   },
-  uses: {
+  type: {
     type: String,
-    require: true,
+    require: true
   },
-  side_effects: [
+  description: {
+    type: String
+  },
+  expiryDate: {
+    type: Date
+  },
+  manufacturer: {
+    type: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  uses: [
+    {
+      type: String,
+    }
+  ],
+  
+
+  sideEffects: [
     {
       type: String,
     },

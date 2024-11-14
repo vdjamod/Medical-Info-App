@@ -7,6 +7,9 @@ import Medicine from "./models/medicine.js"
 
 const app = express();
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 main()
   .then(() => {
     console.log("connection successful");
