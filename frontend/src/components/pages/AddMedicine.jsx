@@ -4,11 +4,17 @@ import { useState } from "react";
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
   const [name, setName] = useState("");
+
   const [uses, setUses] = useState([]);
   const [newUse, setNewUse] = useState("");
+
   const [sideEffect, setSideEffect] = useState([]);
   const [newSideEffect, setNewSideEffect] = useState("");
-  const [ingredients, setIngredient] = useState([]);
+
+  const [ingredients, setIngredients] = useState([]);
+  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientDescription, setIngredientDescription] = useState("");
+  const [ingredientQuantity, setIngredientQuantity] = useState("");
 
   const addNewSideEffect = () => {
     if (newSideEffect.trim()) {
@@ -23,6 +29,10 @@ export default function AddMedicine() {
     console.log(sideEffect);
   };
 
+  const deleteUse = (idx) => {
+    setUses((prevUses) => uses.filter((prevUses) => prevUses.idx != idx));
+  }
+
   const addNewUse = () => {
     if (newUse.trim()) {
       setUses((prevUses) => [...prevUses, newUse.trim()]);
@@ -31,6 +41,10 @@ export default function AddMedicine() {
 
     console.log(uses);
   };
+
+  const addNewIngredient = () => {
+
+  }
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -115,7 +129,15 @@ export default function AddMedicine() {
               <div>
                 <ul>
                   {uses.map((use, idx) => (
-                    <li key={idx}>{use}</li>
+                    <li key={idx}>
+                      {use}
+                      <button
+                        className="ml-4 text-indigo-600 hover:text-indigo-800"
+                        onClick={() => deleteUse(idx)}
+                      >
+                        delete
+                      </button>
+                    </li>
                   ))}
                 </ul>
               </div>
