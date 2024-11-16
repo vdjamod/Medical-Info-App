@@ -30,8 +30,8 @@ export default function AddMedicine() {
   };
 
   const deleteUse = (idx) => {
-    setUses((prevUses) => uses.filter((prevUses) => prevUses.idx != idx));
-  }
+    setUses((uses) => uses.filter((prevUses, id) => id != idx));
+  };
 
   const addNewUse = () => {
     if (newUse.trim()) {
@@ -42,9 +42,7 @@ export default function AddMedicine() {
     console.log(uses);
   };
 
-  const addNewIngredient = () => {
-
-  }
+  const addNewIngredient = () => {};
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -132,6 +130,7 @@ export default function AddMedicine() {
                     <li key={idx}>
                       {use}
                       <button
+                        type="button"
                         className="ml-4 text-indigo-600 hover:text-indigo-800"
                         onClick={() => deleteUse(idx)}
                       >
