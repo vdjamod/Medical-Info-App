@@ -3,18 +3,29 @@ import { useState } from "react";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
+
+  // Name
   const [name, setName] = useState("");
 
+  // Use
   const [uses, setUses] = useState([]);
   const [newUse, setNewUse] = useState("");
 
+  // Side Effect
   const [sideEffects, setSideEffects] = useState([]);
   const [newSideEffect, setNewSideEffect] = useState("");
 
+  // Ingredient
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
+  const [newIngredientName, setNewIngredientName] = useState("");
+
   const [ingredientDescription, setIngredientDescription] = useState("");
+  const [newIngredientDescription, setNewIngredientDescription] = useState("");
+
   const [ingredientQuantity, setIngredientQuantity] = useState("");
+  const [newIngredientQuantity, setNewIngredientQuantity] = useState("");
+
 
   const addNewSideEffect = () => {
     if (newSideEffect.trim()) {
@@ -101,7 +112,7 @@ export default function AddMedicine() {
                 Name
               </label>
               <div className="mt-2">
-                <textarea
+                <input
                   id="name"
                   name="name"
                   type="text"
@@ -287,6 +298,7 @@ export default function AddMedicine() {
                 <div className="mt-5 flex-1">
                   <button
                     type="button"
+                    onClick={addNewIngredient}
                     className="text-indigo-600 hover:text-indigo-800"
                   >
                     Add
