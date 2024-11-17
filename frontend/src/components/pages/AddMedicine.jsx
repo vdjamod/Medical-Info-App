@@ -34,10 +34,8 @@ export default function AddMedicine() {
   };
 
   const updateUse = (idx) => {
-    setNewUse((uses) => uses.filter((prevUses, id) => idx === id));
     setUses((uses) => uses.filter((prevUses, id) => id != idx));
-
-    console.log(uses);
+    setNewUse((uses) => uses.filter((prevUses, id) => idx === id));
   }
 
   const deleteSideEffect = (idx) => {
