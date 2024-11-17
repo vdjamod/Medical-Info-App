@@ -34,11 +34,18 @@ export default function AddMedicine() {
   };
 
   const updateUse = (idx) => {
+    setNewUse(uses[idx]);
     setUses((uses) => uses.filter((prevUses, id) => id != idx));
-    setNewUse((uses) => uses.filter((prevUses, id) => idx === id));
-  }
+  };
 
   const deleteSideEffect = (idx) => {
+    setSideEffects((sideEffects) =>
+      sideEffects.filter((prevSideEffects, id) => id != idx)
+    );
+  };
+
+  const updateSideEffect = (idx) => {
+    setNewSideEffect(sideEffects[idx]);
     setSideEffects((sideEffects) =>
       sideEffects.filter((prevSideEffects, id) => id != idx)
     );
@@ -195,6 +202,13 @@ export default function AddMedicine() {
                   {sideEffects.map((sideEffect, idx) => (
                     <li key={idx}>
                       {sideEffect}
+                      <button
+                        type="button"
+                        className="ml-4 text-indigo-600 hover:text-indigo-800"
+                        onClick={() => updateSideEffect(idx)}
+                      >
+                        update
+                      </button>
                       <button
                         type="button"
                         className="ml-4 text-indigo-600 hover:text-indigo-800"
