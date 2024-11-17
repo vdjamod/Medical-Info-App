@@ -8,7 +8,7 @@ export default function AddMedicine() {
   const [uses, setUses] = useState([]);
   const [newUse, setNewUse] = useState("");
 
-  const [sideEffect, setSideEffect] = useState([]);
+  const [sideEffects, setSideEffects] = useState([]);
   const [newSideEffect, setNewSideEffect] = useState("");
 
   const [ingredients, setIngredients] = useState([]);
@@ -19,18 +19,31 @@ export default function AddMedicine() {
   const addNewSideEffect = () => {
     if (newSideEffect.trim()) {
       // Prevents empty entries
-      setSideEffect((prevSideEffects) => [
+      setSideEffects((prevSideEffects) => [
         ...prevSideEffects,
         newSideEffect.trim(),
       ]);
       setNewSideEffect("");
     }
 
-    console.log(sideEffect);
+    console.log(sideEffects);
   };
 
   const deleteUse = (idx) => {
     setUses((uses) => uses.filter((prevUses, id) => id != idx));
+  };
+
+  const updateUse = (idx) => {
+    setNewUse((uses) => uses.filter((prevUses, id) => idx === id));
+    setUses((uses) => uses.filter((prevUses, id) => id != idx));
+
+    console.log(uses);
+  }
+
+  const deleteSideEffect = (idx) => {
+    setSideEffects((sideEffects) =>
+      sideEffects.filter((prevSideEffects, id) => id != idx)
+    );
   };
 
   const addNewUse = () => {
@@ -132,6 +145,13 @@ export default function AddMedicine() {
                       <button
                         type="button"
                         className="ml-4 text-indigo-600 hover:text-indigo-800"
+                        onClick={() => updateUse(idx)}
+                      >
+                        update
+                      </button>
+                      <button
+                        type="button"
+                        className="ml-4 text-indigo-600 hover:text-indigo-800"
                         onClick={() => deleteUse(idx)}
                       >
                         delete
@@ -174,8 +194,17 @@ export default function AddMedicine() {
               </div>
               <div>
                 <ul>
-                  {sideEffect.map((sideEffect, idx) => (
-                    <li key={idx}>{sideEffect}</li>
+                  {sideEffects.map((sideEffect, idx) => (
+                    <li key={idx}>
+                      {sideEffect}
+                      <button
+                        type="button"
+                        className="ml-4 text-indigo-600 hover:text-indigo-800"
+                        onClick={() => deleteSideEffect(idx)}
+                      >
+                        delete
+                      </button>
+                    </li>
                   ))}
                 </ul>
               </div>
