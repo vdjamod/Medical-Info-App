@@ -106,17 +106,19 @@ export default function AddMedicine() {
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
-    // try {
-    //   const res = await axios.post("/API/admin", {
-    //     name,
-    //     uses,
-    //     side_effects: sideEffects,
-    //     ingredients,
-    //   });
-    // } catch (err) {
-    //   console.log("Unable to add Medicine" + err);
-    // }
+    e.preventDefault();
+    try {
+      const res = await axios.post("/API/admin", {
+        name,
+        uses,
+        sideEffects,
+        ingredients,
+      });
+
+      console.log(res);
+    } catch (err) {
+      console.log("Unable to add Medicine" + err);
+    }
   };
 
   return (
@@ -135,7 +137,7 @@ export default function AddMedicine() {
 
         {/* Name */}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onClick={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"
@@ -172,7 +174,6 @@ export default function AddMedicine() {
                   type="text"
                   value={newUse}
                   onChange={(e) => setNewUse(e.target.value)}
-                  required
                   className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
                 <div className="flex-1">
@@ -227,7 +228,6 @@ export default function AddMedicine() {
                   type="text"
                   value={newSideEffect}
                   onChange={(e) => setNewSideEffect(e.target.value)}
-                  required
                   className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
                 <div className="flex-1">
@@ -288,7 +288,6 @@ export default function AddMedicine() {
                     value={newIngredientName}
                     onChange={(e) => setNewIngredientName(e.target.value)}
                     type="text"
-                    required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -308,7 +307,6 @@ export default function AddMedicine() {
                       setNewIngredientDescription(e.target.value)
                     }
                     type="text"
-                    required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -325,8 +323,7 @@ export default function AddMedicine() {
                     name="ingredient-quantity"
                     value={newIngredientQuantity}
                     onChange={(e) => setNewIngredientQuantity(e.target.value)}
-                    type="text"
-                    required
+                    type="number"
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>

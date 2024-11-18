@@ -7,23 +7,6 @@ const medicineSchema = new Schema({
     type: String,
     require: true,
   },
-  type: {
-    type: String,
-    require: true
-  },
-  description: {
-    type: String
-  },
-  expiryDate: {
-    type: Date
-  },
-  manufacturer: {
-    type: String
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
   uses: [
     {
       type: String,
@@ -41,6 +24,23 @@ const medicineSchema = new Schema({
       quantity: Number
     }
   ],
+  // type: {
+  //   type: String,
+  //   require: true
+  // },
+  // description: {
+  //   type: String
+  // },
+  // expiryDate: {
+  //   type: Date
+  // },
+  // manufacturer: {
+  //   type: String
+  // },
+  // createdAt: {
+  //   type: Date,
+  //   default: Date.now
+  // },
 });
 
 //collection name,it's Schema
