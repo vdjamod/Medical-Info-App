@@ -57,6 +57,22 @@ export default function AddMedicine() {
     );
   };
 
+  const updateIngredient = (idx) => {
+    setNewIngredientName(ingredients[idx].name);
+    setNewIngredientDescription(ingredients[idx].description);
+    setNewIngredientQuantity(ingredients[idx].quantity);
+
+    setIngredients((ingredients) =>
+      ingredients.filter((prevIngredients, id) => id != idx)
+    );
+  };
+
+  const deleteIngredient = (idx) => {
+    setIngredients((ingredients) =>
+      ingredients.filter((prevIngredients, id) => id != idx)
+    );
+  };
+
   const addNewUse = () => {
     if (newUse.trim()) {
       setUses((prevUses) => [...prevUses, newUse.trim()]);
@@ -67,14 +83,20 @@ export default function AddMedicine() {
   };
 
   const addNewIngredient = () => {
-    setIngredients((prevIngredients) => [
-      ...prevIngredients,
-      {
-        name: newIngredientName,
-        description: newIngredientDescription,
-        quantity: newIngredientQuantity,
-      },
-    ]);
+    if (
+      newIngredientName.trim() &&
+      newIngredientDescription.trim() &&
+      newIngredientQuantity.trim()
+    ) {
+      setIngredients((prevIngredients) => [
+        ...prevIngredients,
+        {
+          name: newIngredientName,
+          description: newIngredientDescription,
+          quantity: newIngredientQuantity,
+        },
+      ]);
+    }
 
     console.log(ingredients);
 
@@ -243,7 +265,6 @@ export default function AddMedicine() {
               </div>
             </div>
 
-            {/* Ingredients */}
             <div>
               <div className="flex items-center justify-between">
                 <label
@@ -283,7 +304,9 @@ export default function AddMedicine() {
                     id="ingredient-description"
                     name="ingredient-description"
                     value={newIngredientDescription}
-                    onChange={(e) => setNewIngredientDescription(e.target.value)}
+                    onChange={(e) =>
+                      setNewIngredientDescription(e.target.value)
+                    }
                     type="text"
                     required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -317,6 +340,54 @@ export default function AddMedicine() {
                     Add
                   </button>
                 </div>
+              </div>
+
+              <div className="mt-6">
+                <ul className="space-y-4">
+                  {ingredients.map((ingredient, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm"
+                    >
+                      <div>
+                        <p className="font-semibold text-gray-900">
+                          Name:{" "}
+                          <span className="text-gray-700">
+                            {ingredient.name}
+                          </span>
+                        </p>
+                        <p className="text-gray-900">
+                          Description:{" "}
+                          <span className="text-gray-700">
+                            {ingredient.description}
+                          </span>
+                        </p>
+                        <p className="text-gray-900">
+                          Quantity:{" "}
+                          <span className="text-gray-700">
+                            {ingredient.quantity}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex space-x-4">
+                        <button
+                          type="button"
+                          className="text-indigo-600 hover:text-indigo-800"
+                          onClick={() => updateIngredient(idx)}
+                        >
+                          Update
+                        </button>
+                        <button
+                          type="button"
+                          className="text-red-600 hover:text-red-800"
+                          onClick={() => deleteIngredient(idx)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
