@@ -17,15 +17,10 @@ export default function AddMedicine() {
 
   // Ingredient
   const [ingredients, setIngredients] = useState([]);
-  const [ingredientName, setIngredientName] = useState("");
+
   const [newIngredientName, setNewIngredientName] = useState("");
-
-  const [ingredientDescription, setIngredientDescription] = useState("");
   const [newIngredientDescription, setNewIngredientDescription] = useState("");
-
-  const [ingredientQuantity, setIngredientQuantity] = useState("");
   const [newIngredientQuantity, setNewIngredientQuantity] = useState("");
-
 
   const addNewSideEffect = () => {
     if (newSideEffect.trim()) {
@@ -71,7 +66,22 @@ export default function AddMedicine() {
     console.log(uses);
   };
 
-  const addNewIngredient = () => {};
+  const addNewIngredient = () => {
+    setIngredients((prevIngredients) => [
+      ...prevIngredients,
+      {
+        name: newIngredientName,
+        description: newIngredientDescription,
+        quantity: newIngredientQuantity,
+      },
+    ]);
+
+    console.log(ingredients);
+
+    setNewIngredientName("");
+    setNewIngredientDescription("");
+    setNewIngredientQuantity("");
+  };
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -254,7 +264,8 @@ export default function AddMedicine() {
                   <input
                     id="ingredient-name"
                     name="ingredient-name"
-                    onChange={(e) => setIngredientName(e.target.value)}
+                    value={newIngredientName}
+                    onChange={(e) => setNewIngredientName(e.target.value)}
                     type="text"
                     required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -271,7 +282,8 @@ export default function AddMedicine() {
                   <input
                     id="ingredient-description"
                     name="ingredient-description"
-                    onChange={(e) => setIngredientDescription(e.target.value)}
+                    value={newIngredientDescription}
+                    onChange={(e) => setNewIngredientDescription(e.target.value)}
                     type="text"
                     required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -288,7 +300,8 @@ export default function AddMedicine() {
                   <input
                     id="ingredient-quantity"
                     name="ingredient-quantity"
-                    onChange={(e) => setIngredientQuantity(e.target.value)}
+                    value={newIngredientQuantity}
+                    onChange={(e) => setNewIngredientQuantity(e.target.value)}
                     type="text"
                     required
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
