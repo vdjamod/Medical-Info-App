@@ -55,6 +55,13 @@ app.post('/API/admin', async(req, res) => {
 });
 
 
+//Get all medicine
+app.get('/API/index', async (req, res) => {
+  const allMedicine = Medicine.find({});
+  res.send(allMedicine);
+})
+
+
 
 
 
