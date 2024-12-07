@@ -43,11 +43,26 @@ async function main() {
 // Call the function
 // createAdmin();
 
-let port = 2020;
 
+app.get('/API/admin', async (req, res) => {
+  const allMedicine = await Medicine.find({});
+
+  res.send(allMedicine);
+});
+
+app.delete('/API/admin/:id', async (req, res) => {
+  let {id} = req.params;
+
+  let delMedicine = await Medicine.findByIdAndDelete(id);
+
+  // console.log(id);
+  console.log(delMedicine);
+
+  // res.redirect('/admin');
+})
 
 app.post('/API/admin', async(req, res) => {
-  let { id } = req.params;
+  // let { id } = req.params;
   let newMedicine = new Medicine(req.body);
   const response = await newMedicine.save();
   console.log("New Medicine save into db" + response);
@@ -62,8 +77,7 @@ app.get('/API/index', async (req, res) => {
 })
 
 
-
-
+let port = 2020;
 
 app.listen(port, () => {
   console.log("Server is running at port " + port);
