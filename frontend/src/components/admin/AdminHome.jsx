@@ -5,6 +5,7 @@ import axios from "axios";
 
 function AdminHome() {
   const [allMedicine, setAllMedicine] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
@@ -15,81 +16,24 @@ function AdminHome() {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log("Updated allMedicine:", allMedicine); // Logs after state update
-  }, [allMedicine]);
+  // useEffect(() => {
+  //   console.log("Updated allMedicine:", allMedicine); // Logs after state update
+  // }, [allMedicine]);
 
-  const navigate = useNavigate();
   const createMedicine = () => {
     navigate("/admin/create");
   };
 
   const handleDelete = async (id) => {
     const res = await axios.delete(`/API/admin/${id}`);
-    
-    // setAllMedicine((prevAllMedicine) =>
-    //   prevAllMedicine.filter((medicine) => medicine._id !== id)
-    // );
 
-    const ress = await axios.get("/API/admin");
-    setAllMedicine(ress.data);
+    // console.log(res);
 
-    console.log(res);
+    setAllMedicine((prevAllMedicine) =>
+      prevAllMedicine.filter((medicine) => medicine._id !== id)
+    );
   };
 
-  
-  // return (
-  //   <>
-  //     <button onClick={createMedicine}>Create Medicine</button>
-
-  //     <h2>Medicine List</h2>
-  //     -------------------------------------
-  //     <div className="ml-4">
-  //       <ul>
-  //         {allMedicine.map((medicine) => (
-  //           <li key={medicine._id}>
-  //             <b>name:</b> {medicine.name}
-  //             <br />
-
-  //             <b>Uses </b>
-  //             {medicine.uses.map((use) => (
-  //               <div key={use}>
-  //                 {use}
-  //               </div>
-  //             ))}
-  //             <br />
-
-  //             <b>Side Effects </b>{" "}
-  //             {medicine.sideEffects.map((sideeffect) => (
-  //               <div key={sideeffect}>
-  //                 {sideeffect}
-  //               </div>
-  //             ))}
-  //             <br />
-
-  //             <b>Ingredients </b>
-
-  //             {medicine.ingredients.map((ingredient) => (
-  //               <div key={ingredient._id}>
-  //                 name: {ingredient.name}
-  //                 <br />
-  //                 description: {ingredient.description}
-  //                 <br />
-  //                 quantity: {ingredient.quantity}
-  //                 <br />
-  //               </div>
-  //             ))}
-  //             <br />
-  //             <button>Update</button>
-  //             <button>Delete</button>
-  //             <br />
-  //             -------------------------------------
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     </div>
-  //   </>
-  // );
   return (
     <>
       <div className="p-6 bg-gray-100 min-h-screen">

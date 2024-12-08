@@ -54,11 +54,8 @@ app.delete('/API/admin/:id', async (req, res) => {
   let {id} = req.params;
 
   let delMedicine = await Medicine.findByIdAndDelete(id);
-
-  // console.log(id);
-  console.log(delMedicine);
-
-  // res.redirect('/admin');
+  
+  res.send(delMedicine);
 })
 
 app.post('/API/admin', async(req, res) => {
