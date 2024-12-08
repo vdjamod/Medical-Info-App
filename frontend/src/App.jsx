@@ -3,6 +3,7 @@ import Home from "./Home";
 import Login from "./components/admin/Login";
 import AdminHome from "./components/admin/AdminHome";
 import AddMedicine from "./components/pages/AddMedicine";
+import UpdateMedicine from "./components/pages/UpdateMedicine";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminHome />}/>
           <Route path="/admin/create" element={<AddMedicine />} />
+          <Route path="/admin/update/:id" element={<UpdateMedicine />} />
         </Routes>
       </Router>
     </>

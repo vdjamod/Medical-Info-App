@@ -1,14 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
+import methodOverride from "method-override";
 
 //models
 import Admin from "./models/admin.js";
-import Medicine from "./models/medicine.js"
+import Medicine from "./models/medicine.js";
 
 const app = express();
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 main()
   .then(() => {
@@ -22,8 +24,6 @@ async function main() {
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
-
-
 // // Create a new admin
 // const createAdmin = async () => {
 //     try {
@@ -31,7 +31,7 @@ async function main() {
 //             email: 'xyz@gmail.com',
 //             password: 'xyz@1090',  // Make sure to hash the password in real apps
 //         });
-        
+
 //         const savedAdmin = await admin.save();
 //         console.log('Admin saved:', savedAdmin);
 //     } catch (error) {
@@ -39,26 +39,45 @@ async function main() {
 //     }
 // };
 
-
 // Call the function
 // createAdmin();
 
-
-app.get('/API/admin', async (req, res) => {
+app.get("/API/admin", async (req, res) => {
   const allMedicine = await Medicine.find({});
 
   res.send(allMedicine);
 });
 
-app.delete('/API/admin/:id', async (req, res) => {
-  let {id} = req.params;
+app.get("/API/admin/:id", async (req, res) => {
+  let { id } = req.params;
+
+  const medicine = await Medicine.findById(id);
+  // console.log(medicine);
+
+  res.send(medicine);
+});
+
+app.put("/API/admin/:id", async (req, res) => {
+  let { id } = req.params;
+  // console.log(id);
+  // console.log(req.body);
+
+  let updatedEmployee = await Medicine.findByIdAndUpdate(id, {...req.body}, {new: true});
+
+  // console.log(updatedEmployee);
+  
+  res.redirect('/admin');
+});
+
+app.delete("/API/admin/:id", async (req, res) => {
+  let { id } = req.params;
 
   let delMedicine = await Medicine.findByIdAndDelete(id);
-  
-  res.send(delMedicine);
-})
 
-app.post('/API/admin', async(req, res) => {
+  res.send(delMedicine);
+});
+
+app.post("/API/admin", async (req, res) => {
   // let { id } = req.params;
   let newMedicine = new Medicine(req.body);
   const response = await newMedicine.save();
@@ -66,13 +85,11 @@ app.post('/API/admin', async(req, res) => {
   res.redirect(`/admin`);
 });
 
-
 //Get all medicine
-app.get('/API/index', async (req, res) => {
+app.get("/API/index", async (req, res) => {
   const allMedicine = Medicine.find({});
   res.send(allMedicine);
-})
-
+});
 
 let port = 2020;
 

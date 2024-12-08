@@ -34,6 +34,10 @@ function AdminHome() {
     );
   };
 
+  const handleUpdate = async (id) => {
+    navigate(`/admin/update/${id}`);
+  }
+
   return (
     <>
       <div className="p-6 bg-gray-100 min-h-screen">
@@ -91,7 +95,10 @@ function AdminHome() {
                 </div>
 
                 <div className="flex gap-2">
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow"
+                    onClick={() => handleUpdate(medicine._id)}
+                  >
                     Update
                   </button>
                   <button
