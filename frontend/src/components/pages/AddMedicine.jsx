@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
+  const navigate = useNavigate();
 
   // Name
   const [name, setName] = useState("");
@@ -116,6 +118,8 @@ export default function AddMedicine() {
       });
 
       console.log(res);
+
+      navigate('/admin');
     } catch (err) {
       console.log("Unable to add Medicine" + err);
     }
@@ -137,7 +141,12 @@ export default function AddMedicine() {
 
         {/* Name */}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit}
+            // method="POST"
+            // action="/API/admin"
+          >
             <div>
               <label
                 htmlFor="name"

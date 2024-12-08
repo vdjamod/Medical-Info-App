@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
+
+  const navigate = useNavigate();
 
   let { id } = useParams();
 
@@ -133,6 +135,8 @@ export default function AddMedicine() {
       });
 
       console.log(res);
+
+      navigate('/admin');
     } catch (err) {
       console.log("Unable to update Medicine" + err);
     }

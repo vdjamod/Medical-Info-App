@@ -66,7 +66,8 @@ app.put("/API/admin/:id", async (req, res) => {
 
   // console.log(updatedEmployee);
   
-  res.redirect('/admin');
+  // res.redirect(`/admin`);
+  res.send(updatedEmployee);
 });
 
 app.delete("/API/admin/:id", async (req, res) => {
@@ -82,6 +83,7 @@ app.post("/API/admin", async (req, res) => {
   let newMedicine = new Medicine(req.body);
   const response = await newMedicine.save();
   console.log("New Medicine save into db" + response);
+  
   res.redirect(`/admin`);
 });
 
