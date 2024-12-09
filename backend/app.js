@@ -42,12 +42,14 @@ async function main() {
 // Call the function
 // createAdmin();
 
+// Get all
 app.get("/API/admin", async (req, res) => {
   const allMedicine = await Medicine.find({});
 
   res.send(allMedicine);
 });
 
+// Get one
 app.get("/API/admin/:id", async (req, res) => {
   let { id } = req.params;
 
@@ -57,6 +59,7 @@ app.get("/API/admin/:id", async (req, res) => {
   res.send(medicine);
 });
 
+// Update
 app.put("/API/admin/:id", async (req, res) => {
   let { id } = req.params;
   // console.log(id);
@@ -70,6 +73,7 @@ app.put("/API/admin/:id", async (req, res) => {
   res.send(updatedEmployee);
 });
 
+// Delete
 app.delete("/API/admin/:id", async (req, res) => {
   let { id } = req.params;
 
@@ -78,6 +82,7 @@ app.delete("/API/admin/:id", async (req, res) => {
   res.send(delMedicine);
 });
 
+// Create
 app.post("/API/admin", async (req, res) => {
   // let { id } = req.params;
   let newMedicine = new Medicine(req.body);
