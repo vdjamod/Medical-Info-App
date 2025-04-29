@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { markRefresh } from "../../store/dataSlice";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   // Name
   const [name, setName] = useState("");
@@ -116,6 +120,8 @@ export default function AddMedicine() {
         sideEffects,
         ingredients,
       });
+
+      dispatch(markRefresh());
 
       console.log(res);
 

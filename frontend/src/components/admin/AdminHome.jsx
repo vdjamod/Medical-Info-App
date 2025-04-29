@@ -122,16 +122,19 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { markRefresh } from "../../store/dataSlice";
 import axios from "axios";
 
 function AdminHome() {
   const [allMedicine, setAllMedicine] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios.get("/API/admin");
+        const res = await axios.get("/API/index");
         setAllMedicine(res.data);
       } catch (error) {
         console.error("Error fetching medicines:", error);
@@ -148,6 +151,7 @@ function AdminHome() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/API/admin/${id}`);
+      dispatch(markRefresh());
       setAllMedicine((prevAllMedicine) =>
         prevAllMedicine.filter((medicine) => medicine._id !== id)
       );
@@ -214,6 +218,7 @@ function AdminHome() {
                     <div>Name: {ingredient.name}</div>
                     <div>Description: {ingredient.description}</div>
                     <div>Quantity: {ingredient.quantity}</div>
+                    <br />
                   </div>
                 ))}
               </div>
