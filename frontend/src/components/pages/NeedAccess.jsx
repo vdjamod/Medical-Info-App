@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
-function AuthLayout({ children }) {
+function NeedAccess({ children }) {
   const navigate = useNavigate();
-  const authStatus = useSelector((state) => state.auth.status);
+  const role = useSelector((state) => state.auth.role);
+
   const [isAllowed, setIsAllowed] = useState(false);
-  // console.log(authStatus);
 
   useEffect(() => {
-    if (!authStatus) {
+    if (role === "admin") {
+      setIsAllowed(true);
+    } else {
       Swal.fire({
         icon: "error",
         title: "UnAuthorized User!!! <br> Access Denied",
@@ -19,12 +21,10 @@ function AuthLayout({ children }) {
       }).then(() => {
         navigate(-1);
       });
-    } else {
-      setIsAllowed(true);
     }
   }, []);
 
   return <>{isAllowed ? children : ""}</>;
 }
 
-export default AuthLayout;
+export default NeedAccess;

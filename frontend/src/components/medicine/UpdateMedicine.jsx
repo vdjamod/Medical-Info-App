@@ -1,13 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { markRefresh } from "../../store/dataSlice";
 
 export default function AddMedicine() {
   const today = new Date().toISOString().split("T")[0];
-
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -33,9 +29,8 @@ export default function AddMedicine() {
 
   useEffect(() => {
     async function getData() {
-      const res = await axios.get(`/API/admin/${id}`);
+      const res = await axios.get(`/API/medicine/${id}`);
 
-        console.log(res.data);
       setName(res.data.name);
       setUses(res.data.uses);
       setSideEffects(res.data.sideEffects);
@@ -54,8 +49,6 @@ export default function AddMedicine() {
       ]);
       setNewSideEffect("");
     }
-
-    console.log(sideEffects);
   };
 
   const deleteUse = (idx) => {
@@ -101,16 +94,10 @@ export default function AddMedicine() {
       setUses((prevUses) => [...prevUses, newUse.trim()]);
       setNewUse("");
     }
-
-    console.log(uses);
   };
 
   const addNewIngredient = () => {
-    if (
-      newIngredientName.trim() &&
-      newIngredientDescription.trim() &&
-      newIngredientQuantity.trim()
-    ) {
+    if (newIngredientName.trim() && newIngredientDescription.trim()) {
       setIngredients((prevIngredients) => [
         ...prevIngredients,
         {
@@ -121,8 +108,6 @@ export default function AddMedicine() {
       ]);
     }
 
-    console.log(ingredients);
-
     setNewIngredientName("");
     setNewIngredientDescription("");
     setNewIngredientQuantity("");
@@ -131,17 +116,14 @@ export default function AddMedicine() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/API/admin/${id}`, {
+      const res = await axios.put(`/API/medicine/${id}`, {
         name,
         uses,
         sideEffects,
         ingredients,
       });
 
-      dispatch(markRefresh());
-      console.log(res);
-
-      navigate('/admin');
+      navigate("/admin");
     } catch (err) {
       console.log("Unable to update Medicine" + err);
     }
@@ -151,11 +133,6 @@ export default function AddMedicine() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <img
-                className="mx-auto h-10 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Your Company"
-              /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Update Medicine
           </h2>
@@ -163,12 +140,7 @@ export default function AddMedicine() {
 
         {/* Name */}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            className="space-y-6"
-            onSubmit={handleSubmit}
-            // method="POST"
-            // action={`/API/admin/${id}?_method=PUT`}
-          >
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"

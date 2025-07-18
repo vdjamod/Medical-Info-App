@@ -10,7 +10,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/API/sendmail", { email });
+      const res = await axios.post("/API/user/forget-pass", { email });
 
       if (res.status === 200) {
         alert("Mail sent successfully!");

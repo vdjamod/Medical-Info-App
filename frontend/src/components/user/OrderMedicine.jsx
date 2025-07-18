@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderMedicine() {
   const {
@@ -10,33 +12,52 @@ export default function OrderMedicine() {
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate();
+
   const [medicines, setMedicines] = useState([]);
-  const [medicine, setMedicine] = useState("");
-  const [quantity, setQuantity] = useState("");
+
+  const [newName, setNewName] = useState("");
+  const [newQuantity, setNewQuantity] = useState("");
 
   const addMedicine = () => {
-    if (medicine && quantity) {
-      console.log("set");
-      setMedicines((prev) => [...prev, { name: medicine, quantity }]);
-      setMedicine("");
-      setQuantity("");
+    if (newName && newQuantity) {
+      setMedicines((prev) => [
+        ...prev,
+        { name: newName, quantity: newQuantity },
+      ]);
+      setNewName("");
+      setNewQuantity("");
     }
   };
 
   const onSubmit = async (data) => {
-    if(medicines.length > 0) {
-      console.log(data);
-      console.log({ ...data, medicines });
-      const res = await axios.post("/API/order-medicine", { ...data, medicines });
+    if (medicines.length > 0) {
+      const res = await axios.post("/API/user/medicine/order", {
+        ...data,
+        medicines,
+      });
 
-      if(res.data.status) {
-        setMedicines([]);
-        setMedicine('');
-        setQuantity('');
+      if (res.data.status) {
+        Swal.fire({
+          icon: "success",
+          title: "Mail sent successfully",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate(-1);
+        });
       }
-
-      alert(res.data.message);
     }
+  };
+
+  const updateMedicine = (idx) => {
+    setNewName(medicines[idx].name);
+    setNewQuantity(medicines[idx].quantity);
+    setMedicines(medicines.filter((prev, id) => id !== idx));
+  };
+
+  const deleteMedicine = (idx) => {
+    setMedicines(medicines.filter((prev, id) => id !== idx));
   };
 
   return (
@@ -49,11 +70,7 @@ export default function OrderMedicine() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
-            action="/admin"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="order"
@@ -91,8 +108,13 @@ export default function OrderMedicine() {
                     id="medicine"
                     name="medicine"
                     type="text"
-                    value={medicine} // controlled by local state
-                    onChange={(e) => setMedicine(e.target.value)}
+                    value={newName} // controlled by local state
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter") {
+                        e.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => setNewName(e.target.value)}
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -108,8 +130,14 @@ export default function OrderMedicine() {
                     id="quantity"
                     name="quantity"
                     type="number"
-                    value={quantity} // controlled by local state
-                    onChange={(e) => setQuantity(e.target.value)}
+                    value={newQuantity} // controlled by local state
+                    onKeyDown={(e) => {
+                      if (e.key == "Enter") {
+                        e.preventDefault();
+                        addMedicine();
+                      }
+                    }}
+                    onChange={(e) => setNewQuantity(e.target.value)}
                     className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -118,7 +146,6 @@ export default function OrderMedicine() {
                   <button
                     type="button"
                     className="text-indigo-600 hover:text-indigo-800"
-                    // onClick={() => addMedicine()}
                     onClick={addMedicine}
                   >
                     Add
@@ -148,12 +175,14 @@ export default function OrderMedicine() {
                       <div className="flex space-x-4">
                         <button
                           type="button"
+                          onClick={() => updateMedicine(idx)}
                           className="text-indigo-600 hover:text-indigo-800"
                         >
                           Update
                         </button>
                         <button
                           type="button"
+                          onClick={() => deleteMedicine(idx)}
                           className="text-red-600 hover:text-red-800"
                         >
                           Delete

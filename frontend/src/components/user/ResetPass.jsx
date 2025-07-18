@@ -15,7 +15,7 @@ const ResetPass = () => {
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios.post("/API/validate-user", { id });
+        const res = await axios.post("/API/user/validate", { id });
 
         if (res.status !== 200) {
           alert("Reset Password Link is not valid");
@@ -64,7 +64,7 @@ const ResetPass = () => {
     }
 
     try {
-      const res = await axios.put("/API/reset-pass", { id, newPassword });
+      const res = await axios.put("/API/user/reset-pass", { id, newPassword });
 
       if (res.status === 200) {
         navigate("/signin");

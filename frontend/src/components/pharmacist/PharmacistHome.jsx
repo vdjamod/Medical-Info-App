@@ -1,17 +1,12 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import UserHeader from "./components/user/UserHeader";
-import { SocketContext } from "./components/context/SocketContext";
+import OwnerHeader from "../admin/OwnerHeader";
 
-function Home() {
+function PharmacistHome() {
   const [allMedicine, setAllMedicine] = useState([]);
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-  const mySocket = useContext(SocketContext);
-  const location = useLocation();
-
-  const mobile = location.state;
+  const navigate = useNavigate();;
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -42,39 +37,28 @@ function Home() {
     };
   }, [query]);
 
-  useEffect(() => {
-    if (mySocket != null) {
-      const socketId = mySocket.id;
-      mySocket.emit('save-id',{ mobile, socketId});
-      mySocket.on('get-id', mobile);
-      // mySocket.on('send-id', (id) => {
-      //   console.log("Reissssssssss Id: " + id);
-      // });
-    }
-
-    return () => {
-      if (mySocket != null) {
-        mySocket.off();
-      }
-    };
-  }, [mySocket]);
-
   const handleMedicine = (id) => {
     navigate(`/medicine/${id}`);
   };
 
-  const createMedicine = () => {
-    navigate("/admin/create");
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* UserHeader */}
-      <UserHeader />
+      {/* Header */}
+      <OwnerHeader />
 
       {/* Search Section */}
       <div className="px-4 py-6 max-w-4xl mx-auto">
-        <div className="relative mb-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-bold text-black">Medicine List</h2>
+          <button
+            onClick={() => navigate("/pharmacist/user-list")}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow"
+          >
+            Go to the Chat Section
+          </button>
+        </div>
+
+        <div className="relative mt-4 mb-6">
           <input
             type="text"
             placeholder="Search medicines..."
@@ -122,4 +106,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default PharmacistHome;

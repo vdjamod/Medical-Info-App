@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { sigin } from "../../store/authSlice";
+import { signin } from "../../store/authSlice";
 
-export default function Signin() {
+export default function AdminSignin() {
   const {
     register,
     handleSubmit,
@@ -15,20 +15,20 @@ export default function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmit = async (data) => {
+  const handleSignin = async (data) => {
     let email = data.email;
     let password = data.password;
 
     try {
-      const res = await axios.post("/API/signin", {
+      const res = await axios.post("/API/admin/signin", {
         email,
         password,
       });
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
-        dispatch(sigin());
-        navigate("/");
+        const role = "admin";
+        dispatch(signin({ role }));
+        navigate("/admin");
       } else {
         alert(res.data.message);
       }
@@ -37,19 +37,18 @@ export default function Signin() {
         "Error occurred while checking admin:",
         error.response?.data || error.message
       );
-      alert(res.data.message);
     }
   };
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your account
-            </h2>
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Sign in as Admin
+          </h2>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(handleSignin)}
             className="space-y-6 mb-4 mt-4"
           >
             <div>

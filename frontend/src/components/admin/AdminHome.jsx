@@ -1,141 +1,28 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useEffect } from "react";
-// import axios from "axios";
-
-// function AdminHome() {
-//   const [allMedicine, setAllMedicine] = useState([]);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     async function getData() {
-//       const res = await axios.get("/API/admin");
-//       setAllMedicine(res.data);
-//     }
-
-//     getData();
-//   }, []);
-
-//   // useEffect(() => {
-//   //   console.log("Updated allMedicine:", allMedicine); // Logs after state update
-//   // }, [allMedicine]);
-
-//   const createMedicine = () => {
-//     navigate("/admin/create");
-//   };
-
-//   const handleDelete = async (id) => {
-//     const res = await axios.delete(`/API/admin/${id}`);
-
-//     // console.log(res);
-
-//     setAllMedicine((prevAllMedicine) =>
-//       prevAllMedicine.filter((medicine) => medicine._id !== id)
-//     );
-//   };
-
-//   const handleUpdate = async (id) => {
-//     navigate(`/admin/update/${id}`);
-//   }
-
-//   return (
-//     <>
-//       <div className="p-6 bg-gray-100 min-h-screen">
-//         <button
-//           onClick={createMedicine}
-//           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
-//         >
-//           Create Medicine
-//         </button>
-
-//         <h2 className="text-xl font-semibold mt-6">Medicine List</h2>
-//         <hr className="my-4 border-gray-300" />
-
-//         <div className="ml-4">
-//           <ul>
-//             {allMedicine.map((medicine) => (
-//               <li
-//                 key={medicine._id}
-//                 className="bg-white p-4 rounded shadow mb-4 border border-gray-200"
-//               >
-//                 <div className="mb-2">
-//                   <b className="font-semibold">Name:</b> {medicine.name}
-//                 </div>
-
-//                 <div className="mb-2">
-//                   <b className="font-semibold">Uses:</b>
-//                   {medicine.uses.map((use) => (
-//                     <div key={use} className="ml-4 text-gray-700">
-//                       {use}
-//                     </div>
-//                   ))}
-//                 </div>
-
-//                 <div className="mb-2">
-//                   <b className="font-semibold">Side Effects:</b>
-//                   {medicine.sideEffects.map((sideEffect) => (
-//                     <div key={sideEffect} className="ml-4 text-gray-700">
-//                       {sideEffect}
-//                     </div>
-//                   ))}
-//                 </div>
-
-//                 <div className="mb-4">
-//                   <b className="font-semibold">Ingredients:</b>
-//                   {medicine.ingredients.map((ingredient) => (
-//                     <div
-//                       key={ingredient._id}
-//                       className="ml-4 text-gray-700 border-l-4 border-gray-300 pl-2"
-//                     >
-//                       <div>Name: {ingredient.name}</div>
-//                       <div>Description: {ingredient.description}</div>
-//                       <div>Quantity: {ingredient.quantity}</div>
-//                     </div>
-//                   ))}
-//                 </div>
-
-//                 <div className="flex gap-2">
-//                   <button
-//                     className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow"
-//                     onClick={() => handleUpdate(medicine._id)}
-//                   >
-//                     Update
-//                   </button>
-//                   <button
-//                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow"
-//                     onClick={() => handleDelete(medicine._id)}
-//                   >
-//                     Delete
-//                   </button>
-//                 </div>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-
-// export default AdminHome;
-
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { markRefresh } from "../../store/dataSlice";
 import axios from "axios";
+import OwnerHeader from "./OwnerHeader";
+import GeneralModal from "../pages/GeneralModal";
 
 function AdminHome() {
-  const [allMedicine, setAllMedicine] = useState([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [medicineDeleteID, setMedicineDeleteID] = useState();
+  const [allMedicine, setAllMedicine] = useState([]);
 
   useEffect(() => {
     async function getData() {
       try {
-        const res = await axios.get("/API/index");
-        setAllMedicine(res.data);
+        const res = await axios.get("/API/medicine", {
+          withCredentials: true,
+        });
+
+        if (res.data.success) {
+          setAllMedicine(res.data.allMedicine);
+        } else {
+          alert(res.data.message);
+        }
       } catch (error) {
         console.error("Error fetching medicines:", error);
       }
@@ -144,17 +31,17 @@ function AdminHome() {
     getData();
   }, []);
 
-  const createMedicine = () => {
-    navigate("/admin/create");
-  };
-
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/API/admin/${id}`);
-      dispatch(markRefresh());
-      setAllMedicine((prevAllMedicine) =>
-        prevAllMedicine.filter((medicine) => medicine._id !== id)
-      );
+      const res = await axios.delete(`/API/medicine/${id}`);
+
+      if (res.data.success) {
+        setAllMedicine((prevAllMedicine) =>
+          prevAllMedicine.filter((medicine) => medicine._id !== id)
+        );
+      } else {
+        alert(res.data.message);
+      }
     } catch (error) {
       console.error("Error deleting medicine:", error);
     }
@@ -166,80 +53,82 @@ function AdminHome() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-md p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-blue-600">Admin Dashboard</h1>
-        <button
-          onClick={createMedicine}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow"
-        >
-          Create Medicine
-        </button>
-      </header>
+      <OwnerHeader />
 
-      {/* Main Content */}
-      <main className="p-6">
-        <h2 className="text-xl font-semibold mb-6">Medicine List</h2>
+      <GeneralModal
+        open={isModelOpen}
+        setOpen={setIsModelOpen}
+        title="delete medicine"
+        message="Are you sure you want to Delete Medicine? This action cannot be undone."
+        onConfirm={() => {
+          handleDelete(medicineDeleteID);
+          setIsModelOpen(false);
+        }}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
 
-        {/* Medicine List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allMedicine.map((medicine) => (
-            <div
-              key={medicine._id}
-              className="bg-white p-4 rounded shadow border border-gray-200"
-            >
-              <h3 className="text-lg font-semibold mb-2">{medicine.name}</h3>
-
-              <div className="mb-2">
-                <b className="font-semibold">Uses:</b>
-                {medicine.uses.map((use) => (
-                  <div key={use} className="ml-4 text-gray-700">
-                    {use}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mb-2">
-                <b className="font-semibold">Side Effects:</b>
-                {medicine.sideEffects.map((sideEffect) => (
-                  <div key={sideEffect} className="ml-4 text-gray-700">
-                    {sideEffect}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mb-4">
-                <b className="font-semibold">Ingredients:</b>
-                {medicine.ingredients.map((ingredient) => (
-                  <div
-                    key={ingredient._id}
-                    className="ml-4 text-gray-700 border-l-4 border-gray-300 pl-2"
-                  >
-                    <div>Name: {ingredient.name}</div>
-                    <div>Description: {ingredient.description}</div>
-                    <div>Quantity: {ingredient.quantity}</div>
-                    <br />
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow"
-                  onClick={() => handleUpdate(medicine._id)}
-                >
-                  Update
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow"
-                  onClick={() => handleDelete(medicine._id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-bold text-black">Medicine List</h2>
+          <button
+            onClick={() => navigate("/admin/create")}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow"
+          >
+            ➕ Add Medicine
+          </button>
+          <button
+            onClick={() => navigate("/admin/pharmacist/add")}
+            className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold px-4 py-2 rounded-md shadow"
+          >
+            ➕ Add Phaarmacist
+          </button>
         </div>
+
+        {allMedicine.length === 0 ? (
+          <p className="text-center text-gray-500">No medicines available.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allMedicine.map((medicine) => (
+              <div
+                key={medicine._id}
+                onClick={() => navigate(`/medicine/${medicine._id}`)}
+                className="cursor-pointer bg-white p-5 rounded-xl border shadow-sm hover:shadow-md transition-all"
+              >
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {medicine.name}
+                </h3>
+
+                <p className="text-sm text-gray-500 mb-4">
+                  Click to view details
+                </p>
+
+                <div className="flex justify-end gap-4 mt-auto text-sm text-blue-600">
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpdate(medicine._id);
+                    }}
+                    className="hover:underline cursor-pointer"
+                  >
+                    Update
+                  </span>
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMedicineDeleteID(medicine._id);
+                      setIsModelOpen(true);
+                      // handleDelete(medicine._id);
+                    }}
+                    className="text-red-600 hover:underline cursor-pointer"
+                  >
+                    Delete
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

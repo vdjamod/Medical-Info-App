@@ -2,8 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signin } from "../../store/authSlice";
 
-function Singup() {
+function Signup() {
   const {
     register,
     handleSubmit,
@@ -13,21 +15,25 @@ function Singup() {
 
   const password = watch("password");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
     let name = data.name;
     let email = data.email;
     let password = data.password;
+    const mobile = data.mobile;
 
     try {
-      const res = await axios.post("/API/signup", {
+      const res = await axios.post("/API/user/signup", {
         name,
         email,
         password,
+        mobile
       });
 
       if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
+        const role = "user";
+        dispatch(signin({ role }));
         navigate("/");
       } else {
         alert(res.data.message);
@@ -39,22 +45,13 @@ function Singup() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <img
-                  className="mx-auto h-10 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt="Your Company"
-                /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign up to your account
+            Create new account
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
-            // action="/admin"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name */}
             <div>
               <label
@@ -98,6 +95,30 @@ function Singup() {
                 {errors.email && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.email.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile */}
+            <div>
+              <label
+                htmlFor="mobile"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Mobile Number
+              </label>
+              <div className="mt-2">
+                <input
+                  id="mobile"
+                  type="mobile"
+                  autoComplete="mobile"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  {...register("mobile", { required: "mobile is required" })}
+                />
+                {errors.mobile && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.mobile.message}
                   </p>
                 )}
               </div>
@@ -184,4 +205,4 @@ function Singup() {
   );
 }
 
-export default Singup;
+export default Signup;
